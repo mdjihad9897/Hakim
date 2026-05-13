@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unique Computer Training Center </title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body { font-family: 'Hind Siliguri', sans-serif; scroll-behavior: smooth; }
+        .glass { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255, 255, 255, 0.3); }
+        .premium-gradient { background: linear-gradient(135deg, #0f172a 0%, #2563eb 100%); }
+        .card-shadow { box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.1); transition: all 0.4s ease; }
+        .card-shadow:hover { transform: translateY(-10px); box-shadow: 0 20px 40px -15px rgba(37, 99, 235, 0.3); }
+        .floating { animation: float 6s ease-in-out infinite; }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
+        .custom-scrollbar::-webkit-scrollbar { width: 5px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #2563eb; border-radius: 10px; }
+        .section-header::after { content: ''; width: 80px; height: 4px; background: #2563eb; display: block; margin: 10px auto; border-radius: 2px; }
+
+        /* Auth Styles */
+        .main-auth-container { font-family: 'Hind Siliguri', sans-serif; display: none; position: fixed; inset: 0; z-index: 9999; justify-content: center; align-items: center; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); padding: 15px; }
+        .auth-card { background: #ffffff; width: 100%; max-width: 420px; border-radius: 25px; overflow: hidden; box-shadow: 0 15px 35px rgba(0,0,0,0.2); position: relative; }
+        .auth-header-top { background: #764ba2; padding: 25px; text-align: center; color: #fff; }
+        .auth-header-top i { font-size: 35px; margin-bottom: 5px; }
+        .auth-header-top h2 { margin: 0; font-size: 22px; }
+        .auth-body { padding: 25px; }
+        .input-group { position: relative; margin-bottom: 15px; }
+        .input-group i { position: absolute; left: 15px; top: 13px; color: #764ba2; font-size: 16px; }
+        .input-group input, .input-group select { width: 100%; padding: 10px 15px 10px 40px; border: 2px solid #eee; border-radius: 10px; outline: none; font-size: 14px; box-sizing: border-box; }
+        .action-btn { width: 100%; padding: 12px; background: linear-gradient(to right, #667eea, #764ba2); color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: 600; cursor: pointer; }
+        .switch-text { text-align: center; margin-top: 15px; color: #666; font-size: 13px; }
+        .switch-text b { color: #764ba2; cursor: pointer; }
+        .close-auth { position: absolute; top: 15px; right: 20px; color: white; cursor: pointer; font-size: 20px; }
+        .hidden { display: none; }
+    </style>
+</head>
+<body id="home" class="bg-[#fcfdfe] text-[#1e293b]">
+
+    <!-- Auth Container -->
+    <div id="authModal" class="main-auth-container">
+        <div class="auth-card">
+            <span class="close-auth" onclick="closeAuth()">&times;</span>
+            <div class="auth-header-top">
+                <i class="fas fa-user-circle"></i>
+                <h2 id="form-title">লগইন করুন</h2>
+            </div>
+            <div class="auth-body">
+                <div id="login-box">
+                    <div class="input-group">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" id="l-email" placeholder="ইমেইল">
+                    </div>
+                    <div class="input-group">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="l-pass" placeholder="পাসওয়ার্ড">
+                    </div>
+                    <button class="action-btn" id="login-btn">প্রবেশ করুন</button>
+                    <p class="switch-text">অ্যাকাউন্ট নেই? <b onclick="toggleMode('signup')">নতুন তৈরি করুন</b></p>
+                </div>
+
+                <div id="signup-box" class="hidden">
+                    <div class="input-group"><i class="fas fa-user"></i><input type="text" id="s-name" placeholder="পুরো নাম"></div>
+                    <div class="input-group"><i class="fas fa-envelope"></i><input type="email" id="s-email" placeholder="ইমেইল"></div>
+                    <div class="input-group"><i class="fas fa-phone"></i><input type="tel" id="s-phone" placeholder="ফোন নম্বর"></div>
+                    <div class="input-group">
+                        <i class="fas fa-venus-mars"></i>
+                        <select id="s-gender">
+                            <option value="">জেন্ডার সিলেক্ট করুন</option>
+                            <option value="Male">পুরুষ</option>
+                            <option value="Female">মহিলা</option>
+                        </select>
+                    </div>
+                    <div class="input-group"><i class="fas fa-map-marker-alt"></i><input type="text" id="s-address" placeholder="ঠিকানা"></div>
+                    <div class="input-group"><i class="fas fa-lock"></i><input type="password" id="s-pass" placeholder="পাসওয়ার্ড (৮ ডিজিট)"></div>
+                    <button class="action-btn" id="signup-btn">রেজিস্ট্রেশন করুন</button>
+                    <p class="switch-text">ইতিমধ্যেই ইউজার? <b onclick="toggleMode('login')">লগইন করুন</b></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <a href="#" class="fixed bottom-6 right-6 z-[999] bg-green-500 text-white w-14 h-14 rounded-full flex items-center justify-center shadow-2xl hover:scale-110 transition">
+        <i class="fab fa-whatsapp text-3xl"></i>
+    </a>
+
+    <div class="bg-blue-900 text-white py-2 text-xs md:text-sm px-4 hidden md:block">
+        <div class="max-w-7xl mx-auto flex justify-between">
+            <div class="flex gap-4">
+                <span><i class="fas fa-phone-alt mr-2 text-blue-300"></i> 01990649885</span>
+                <span><i class="fas fa-phone-alt mr-2 text-blue-300"></i> 01871949404</span>
+                <span><i class="fas fa-envelope mr-2 text-blue-300"></i> hakimulbz@gmail.com</span>
+            </div>
+            <div class="flex gap-4">
+                <span><i class="fas fa-clock mr-2 text-blue-300"></i> ক্লাস টাইম শনিবার-বৃহস্পতিবার সকাল ৯টা সন্ধ্যা ৭টা পর্যন্ত</span>
+            </div>
+        </div>
+    </div>
+
+    <nav class="sticky top-0 z-[100] glass px-4 py-3">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-2 group cursor-pointer">
+                <div class="p-2 rounded-xl group-hover:rotate-12 transition">
+                    <div class="logo">
+                        <a href="#"><img src="https://ik.imagekit.io/hw7dt79rm/Screenshot%20(88)-modified.png" width="70" height="50"></a>
+                    </div>          
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold text-blue-900 leading-none">ইউনিক কম্পিউটার ট্রেনিং সেন্টার</h1>
+                    <span class="text-[10px] uppercase tracking-widest text-gray-500 font-semibold">Training Center</span>
+                </div>
+            </div>
+            
+            <ul class="hidden lg:flex space-x-8 font-semibold text-gray-700">
+                <li><a href="#home" class="text-blue-600">হোম</a></li>
+                <li><a href="#courses" class="hover:text-blue-600 transition">কোর্সসমূহ</a></li>
+                <li><a href="#gallery" class="hover:text-blue-600 transition">গ্যালারি</a></li>
+                <li><a href="#notice" class="hover:text-blue-600 transition">নোটিশ</a></li>
+                <li><a href="#instructors" class="hover:text-blue-600 transition">শিক্ষক</a></li>
+                <li><a href="#contact" class="hover:text-blue-600 transition">যোগাযোগ</a></li>
+            </ul>
+
+            <div class="flex items-center gap-3">
+                <button onclick="openAuth()" class="hidden md:block border-2 border-blue-600 text-blue-600 px-5 py-1.5 rounded-lg font-bold hover:bg-blue-600 hover:text-white transition">লগইন</button>
+                <a href="https://bdyouthict.com/exam-result"><button class="hidden md:block border-2 border-blue-600 text-blue-600 px-5 py-1.5 rounded-lg font-bold hover:bg-blue-600 hover:text-white transition">পরীক্ষার ফলাফল</button></a>
+            </div>
+        </div>
+    </nav>
+
+    
+    <section class="premium-gradient py-16 md:py-28 px-4 relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-1/3 h-full bg-white opacity-[0.03] skew-x-12"></div>
+        <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center relative z-10">
+            <div class="text-white text-center md:text-left">
+                <span class="inline-block bg-blue-500/30 px-4 py-1 rounded-full text-blue-100 text-sm font-semibold mb-6 animate-pulse">#১ আইটি ট্রেনিং সেন্টার</span>
+                <h2 class="text-4xl md:text-6xl font-extrabold leading-tight">
+                    ভবিষ্যতের জন্য <br> <span class="text-blue-400">কারিগরি দক্ষতায়</span> নিজেকে গড়ুন
+                </h2>
+                <p class="mt-6 text-blue-100 text-lg opacity-90 max-w-lg">
+                    আধুনিক সিলেবাস, উন্নত ল্যাব এবং অভিজ্ঞ শিক্ষকদের মাধ্যমে আইটি জগতে আপনার ক্যারিয়ার শুরু করুন। আমরা দিচ্ছি ১০০% প্রাকটিক্যাল ক্লাসের গ্যারান্টি।
+                </p>
+                <div class="mt-10 flex flex-wrap gap-4 justify-center md:justify-start">
+                    <a href="#courses" class="bg-white text-blue-700 px-8 py-4 rounded-xl font-bold text-lg hover:scale-105 transition shadow-2xl">কোর্সগুলো দেখুন</a>
+                    <a href="#contact" class="border border-white/40 text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-white/10 transition">ফ্রি কাউন্সেলিং</a>
+                </div>
+            </div>
+            <div class="relative hidden md:block">
+                <div class="floating">
+                    <img src="https://images.unsplash.com/photo-1571171637578-41bc2dd41cd2?q=80&w=1000" class="rounded-3xl shadow-2xl border-[12px] border-white/10" alt="Training">
+                </div>
+                <div class="absolute -bottom-8 -left-8 bg-white p-6 rounded-2xl shadow-2xl flex items-center gap-4">
+                    <div class="bg-orange-100 p-3 rounded-full text-orange-600">
+                        <i class="fas fa-certificate text-2xl"></i>
+                    </div>
+                    <div>
+                        <p class="font-bold text-gray-800">গভর্নমেন্ট সার্টিফিকেট</p>
+                        <p class="text-xs text-gray-500 font-medium">কোর্স শেষে প্রদান করা হয়</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="notice" class="py-12 bg-white px-4 border-b">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row gap-6 items-center">
+            <div class="bg-red-600 text-white px-6 py-2 rounded-r-full font-bold whitespace-nowrap animate-pulse">
+                সর্বশেষ আপডেট:
+            </div>
+            <marquee class="text-gray-700 font-medium">আগামী ১৫ই মে থেকে নতুন গ্রাফিক্স ডিজাইন এবং ওয়েব ডেভেলপমেন্ট ব্যাচে ভর্তি শুরু হতে যাচ্ছে। সীমিত আসনে ২০% ছাড় পেতে আজই যোগাযোগ করুন!</marquee>
+        </div>
+    </section>
+
+    <section class="max-w-7xl mx-auto px-4 -mt-10 grid grid-cols-2 md:grid-cols-4 gap-4 relative z-20">
+        <div class="bg-white p-6 rounded-2xl shadow-xl text-center border-t-4 border-blue-600 card-shadow">
+            <h3 class="text-3xl font-extrabold text-blue-900">১২০০+</h3>
+            <p class="text-gray-500 font-semibold uppercase text-[10px] tracking-wider mt-1">সফল শিক্ষার্থী</p>
+        </div>
+        <div class="bg-white p-6 rounded-2xl shadow-xl text-center border-t-4 border-orange-500 card-shadow">
+            <h3 class="text-3xl font-extrabold text-blue-900">২৫+</h3>
+            <p class="text-gray-500 font-semibold uppercase text-[10px] tracking-wider mt-1">ডিজিটাল কোর্সসমূহ</p>
+        </div>
+        <div class="bg-white p-6 rounded-2xl shadow-xl text-center border-t-4 border-green-500 card-shadow">
+            <h3 class="text-3xl font-extrabold text-blue-900">১৫+</h3>
+            <p class="text-gray-500 font-semibold uppercase text-[10px] tracking-wider mt-1">এক্সপার্ট মেন্টর</p>
+        </div>
+        <div class="bg-white p-6 rounded-2xl shadow-xl text-center border-t-4 border-purple-500 card-shadow">
+            <h3 class="text-3xl font-extrabold text-blue-900">১০০%</h3>
+            <p class="text-gray-500 font-semibold uppercase text-[10px] tracking-wider mt-1">প্রাকটিক্যাল ল্যাব</p>
+        </div>
+    </section>
+
+    <section class="py-24 px-4 bg-gray-50">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 section-header">আমাদের বৈশিষ্ট্যসমূহ</h2>
+                <p class="text-gray-500 mt-4">ইউনিক কম্পিউটার ট্রেনিং সেন্টারকে বেছে নিবেন?</p>
+            </div>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-white p-8 rounded-3xl card-shadow border border-gray-100">
+                    <div class="w-14 h-14 bg-blue-100 rounded-2xl flex items-center justify-center text-blue-600 mb-6">
+                        <i class="fas fa-video text-2xl"></i>
+                    </div>
+                    <h4 class="text-xl font-bold mb-4">ক্লাস ভিডিও রেকর্ডিং</h4>
+                    <p class="text-gray-500 leading-relaxed text-sm">প্রতিটি ক্লাসের পর হাই-কোয়ালিটি ভিডিও রেকর্ডিং দেওয়া হয় যাতে আপনি বাসায় বসে রিভিশন দিতে পারেন।</p>
+                </div>
+                <div class="bg-white p-8 rounded-3xl card-shadow border border-gray-100">
+                    <div class="w-14 h-14 bg-green-100 rounded-2xl flex items-center justify-center text-green-600 mb-6">
+                        <i class="fas fa-briefcase text-2xl"></i>
+                    </div>
+                    <h4 class="text-xl font-bold mb-4">জব প্লেসমেন্ট সহায়তা</h4>
+                    <p class="text-gray-500 leading-relaxed text-sm">কোর্স শেষ হওয়ার পর আমরা আপনাকে বিভিন্ন কোম্পানিতে চাকরির ইন্টারভিউ দেওয়ার সুযোগ করে দেব।</p>
+                </div>
+                <div class="bg-white p-8 rounded-3xl card-shadow border border-gray-100">
+                    <div class="w-14 h-14 bg-purple-100 rounded-2xl flex items-center justify-center text-purple-600 mb-6">
+                        <i class="fas fa-headset text-2xl"></i>
+                    </div>
+                    <h4 class="text-xl font-bold mb-4">লাইফটাইম সাপোর্ট</h4>
+                    <p class="text-gray-500 leading-relaxed text-sm">কোর্স চলাকালীন বা কোর্স শেষে যেকোনো সমস্যায় সবসময় আপনার পাশে থাকবো।</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="courses" class="py-24 px-4 bg-white">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex justify-between items-end mb-12">
+                <div>
+                    <h2 class="text-3xl font-bold text-gray-900 section-header md:after:ml-0">কোর্সসমূহ</h2>
+                    <p class="text-gray-500 mt-2"></p>
+                </div>
+            </div>
+            
+       
+             <div class="grid md:grid-cols-3 gap-8 mb-12">
+                <div class="bg-white border rounded-3xl overflow-hidden card-shadow group">
+                    <div class="relative overflow-hidden h-52">
+                        <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1000" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" alt="Office">
+                        <div class="absolute top-4 left-4 bg-blue-600 text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase">বেস্ট সেলার</div>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center gap-1 text-yellow-400 text-xs mb-3">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                            <span class="text-gray-400 ml-2">(৪৮০ জন শিক্ষার্থী)</span>
+                        </div>
+                        <h4 class="text-xl font-bold mb-3 hover:text-blue-600 transition cursor-pointer">কম্পিউটার অফিস অ্যাপ্লিকেশন</h4>
+                        <div class="flex justify-between items-center text-sm text-gray-500 mb-6">
+                            <span><i class="far fa-clock mr-1"></i> ৬  মাস</span>
+                            <span><i class="fas fa-desktop mr-1"></i> </span>
+                        </div>
+                        <div class="flex items-center justify-between pt-4 border-t">
+                            <div>
+                                <span class="text-2xl font-bold text-blue-600">৳ ৩,৫০০</span>
+                                <span class="text-sm text-gray-400 line-through ml-2">৳ ৪,০০০ </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+           
+            <div style="display: flex; flex-direction: row; justify-content: center; align-items: flex-start; gap: 20px; padding: 20px; font-family: 'Segoe UI', Arial, sans-serif; background-color: #f4f7f6; flex-wrap: wrap;">
+
+                <div style="flex: 1; min-width: 350px; max-width: 480px; background: #ffffff; border-radius: 12px; box-shadow: 0 8px 20px rgba(0,0,0,0.1); border: 1px solid #ddd; overflow: hidden;">
+                    <div style="background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); padding: 18px; text-align: center;">
+                        <h2 style="margin: 0; color: #fff; font-size: 22px;"> অন্যান্য সেবাসমূহ</h2>
+                    </div>
+                    <div style="padding: 5px 0;">
+                        <div style="padding: 12px 20px; border-bottom: 1px solid #f0f0f0;">📄 ফটোকপি, সিভি, স্ট্যাম্প লেখা</div>
+                        <div style="padding: 12px 20px; border-bottom: 1px solid #f0f0f0; background: #fafafa;">📸 ছবি, ছবি থেকে ছবি তৈরি</div>
+                        <div style="padding: 12px 20px; border-bottom: 1px solid #f0f0f0;">🖨️ স্ক্যানিং ও লেমিনেটিং</div>
+                        <div style="padding: 12px 20px; border-bottom: 1px solid #f0f0f0; background: #fafafa;">🏡 জমি খারিজ ও জমির খাজনা</div>
+                        <div style="padding: 12px 20px; border-bottom: 1px solid #f0f0f0;">💼 সরকারি ও বেসরকারি চাকরির আবেদন</div>
+                        <div style="padding: 12px 20px; border-bottom: 1px solid #f0f0f0; background: #fafafa;">🎓 স্কুল, কলেজ ও বিশ্ববিদ্যালয় ভর্তি</div>
+                        <div style="padding: 12px 20px; border-bottom: 1px solid #f0f0f0;">🆔 এনআইডি কার্ড সংশোধন ও উত্তোলন</div>
+                        <div style="padding: 12px 20px; background: #fafafa;">🛂 পাসপোর্টের আবেদন</div>
+                    </div>
+                </div>
+
+                <div style="flex: 1; min-width: 350px; max-width: 480px; background: #ffffff; border-radius: 12px; box-shadow: 0 8px 20px rgba(0,0,0,0.1); border: 1px solid #ddd; overflow: hidden;">
+                    <div style="background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); padding: 18px; text-align: center;">
+                        <h2 style="margin: 0; color: #fff; font-size: 22px;"> অন্যান্য সেবাসমূহ</h2>
+                    </div>
+                    <div style="padding: 5px 0;">
+                        <div style="padding: 12px 20px; border-bottom: 1px solid #f0f0f0;">👮 পুলিশ ক্লিয়ারেন্স আবেদন</div>
+                        <div style="padding: 12px 20px; border-bottom: 1px solid #f0f0f0; background: #fafafa;">🆔 নতুন এনআইডি কার্ডের আবেদন</div>
+                        <div style="padding: 12px 20px; border-bottom: 1px solid #f0f0f0;">👶 নতুন জন্ম নিবন্ধনের আবেদন</div>
+                        <div style="padding: 12px 20px; border-bottom: 1px solid #f0f0f0; background: #fafafa;">📝 প্রশ্ন কম্পোজ (বাংলা, ইংরেজি, আরবী)</div>
+                        <div style="padding: 12px 20px; border-bottom: 1px solid #f0f0f0;">🎨 ব্যানার, পোস্টার ও ভিজিটিং কার্ড</div>
+                        <div style="padding: 12px 20px; border-bottom: 1px solid #f0f0f0; background: #fafafa;">👕 টি-শার্ট, জার্সি ও মগ প্রিন্টিং</div>
+                        <div style="padding: 12px 20px; border-bottom: 1px solid #f0f0f0;">🎓 আইডি কার্ড ও ফিতা প্রিন্ট</div>
+                        <div style="padding: 12px 20px; background: #fafafa;">🎙️ অডিও প্রচার রেকর্ডিং</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="gallery" class="py-24 bg-gray-50 px-4">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold text-gray-900 section-header">আমাদের কার্যক্রম ও গ্যালারি</h2>
+                <p class="text-gray-500 mt-4">আমাদের ল্যাব ও ক্লাসরুমের কিছু মুহূর্ত</p>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="h-60 rounded-3xl overflow-hidden shadow-lg border-4 border-white group">
+                    <img src="https://scontent.fjsr8-2.fna.fbcdn.net/v/t39.30808-6/515507889_1555915022498755_7357844952087062433_n.jpg?stp=c253.0.1542.1542a_dst-jpg_s206x206_tt6&_nc_cat=111&ccb=1-7&_nc_sid=5df8b4&_nc_eui2=AeFYOqDzCNpUe2AKgDN_Kw5M1RDoXLLk0STVEOhcsuTRJIhvTQGEcsntOOjuYZe8BuekN9pWzRr5uL5rQ3o25cnH&_nc_ohc=CTGDzQxZ5p0Q7kNvwH7yhzi&_nc_oc=Ados4y7zgeXwZUkK7lWc8LnMYjpKGLSfMq4hm6RADl4wO3YLq4IGQ9WpXMx_EiODuzs&_nc_zt=23&_nc_ht=scontent.fjsr8-2.fna&_nc_gid=d2x32ja8q2n6Lae37M4VBQ&_nc_ss=7b2a8&oh=00_Af7wuQ3K-iUoFfenWcSfMDFRuW3l6tEXLbolQ9KuFaGG5w&oe=6A0894A2" class="w-full h-full object-cover group-hover:rotate-3 group-hover:scale-110 transition cursor-pointer">
+                </div>
+                <div class="h-60 rounded-3xl overflow-hidden shadow-lg border-4 border-white group">
+                    <img src="https://scontent.fjsr8-2.fna.fbcdn.net/v/t39.30808-6/495200003_1427015918722000_7120889508712924861_n.jpg?stp=c253.0.1542.1542a_dst-jpg_s206x206_tt6&_nc_cat=109&ccb=1-7&_nc_sid=a934a8&_nc_eui2=AeHFwrdnwGjGHX6L5K6Byyd2yXMQjUGKZmvJcxCNQYpma26VjzPb5l10qWhSvMgu-HS_jW9t_tvjBdCSk9dOUCDW&_nc_ohc=0QPZJ7flVSEQ7kNvwFmEDx2&_nc_oc=AdpNByHA7Pflm_pncn0ozWwKvs5URWA-gcZze8ULukSOzGmuZSLmRHf5vuz_hQbm9Lk&_nc_zt=23&_nc_ht=scontent.fjsr8-2.fna&_nc_gid=nX8rtvfqL9jPi2ZHT_t5LQ&_nc_ss=7b2a8&oh=00_Af6GTo_BcMb6u4871G1E5X35efZ0SAreu4klpP9N0F5elQ&oe=6A0891BF" class="w-full h-full object-cover group-hover:rotate-3 group-hover:scale-110 transition cursor-pointer">
+                </div>
+                <div class="h-60 rounded-3xl overflow-hidden shadow-lg border-4 border-white group">
+                    <img src="https://scontent.fjsr8-2.fna.fbcdn.net/v/t39.30808-6/495551419_1427015742055351_5968492832334484521_n.jpg?stp=c253.0.1542.1542a_dst-jpg_s206x206_tt6&_nc_cat=108&ccb=1-7&_nc_sid=a934a8&_nc_eui2=AeHAKQa0VESjR5_93t8-Dd98Ne_zqzLe4yU17_OrMt7jJYQFWwwABrR7MXqVy5Z0wwte5dKnTbVyRqofw9fCDmEO&_nc_ohc=OOi3mcNIwqkQ7kNvwEnnKJn&_nc_oc=Adp4U8d7-3FK7Xr386eXeR9o3cdW9gqr9y1W3wJQGOVJfgHkTQ_U8RhwKsJFl7guC0U&_nc_zt=23&_nc_ht=scontent.fjsr8-2.fna&_nc_gid=nX8rtvfqL9jPi2ZHT_t5LQ&_nc_ss=7b2a8&oh=00_Af6xs9vy6Sjdt0abGH9gXUJw-1EAfDRoz1viCnncW2G5vg&oe=6A08BC22" class="w-full h-full object-cover group-hover:rotate-3 group-hover:scale-110 transition cursor-pointer">
+                </div>
+                <div class="h-60 rounded-3xl overflow-hidden shadow-lg border-4 border-white group">
+                    <img src="https://scontent.fjsr8-2.fna.fbcdn.net/v/t39.30808-6/481944750_1380246233398969_4744585967279652054_n.jpg?stp=c253.0.1542.1542a_dst-jpg_s206x206_tt6&_nc_cat=102&ccb=1-7&_nc_sid=5df8b4&_nc_eui2=AeHxWCg7wwiq1IqJvndZOSh1CoIBYUKS4i8KggFhQpLiL_HVCgiYWXAsrUlCsyjFHyZuJoSzm0x3b6TlxZWenegq&_nc_ohc=91DrSHmjhH0Q7kNvwEmwSfb&_nc_oc=AdolW8WRhkwSPLQQtDJ5kmgWaMOGL-DlmtPt4m_2SUnHpK_SkganJ0wngc_QDqkgjsE&_nc_zt=23&_nc_ht=scontent.fjsr8-2.fna&_nc_gid=0uDhbMRGGHnMdC1UUR79bA&_nc_ss=7b2a8&oh=00_Af5s-4vkUGlELiYaxB8I4W1ZBFfWFF0gQSsUrH468xvODQ&oe=6A08A0E9" class="w-full h-full object-cover group-hover:rotate-3 group-hover:scale-110 transition cursor-pointer">
+                </div>
+                <div class="h-60 rounded-3xl overflow-hidden shadow-lg border-4 border-white group">
+                    <img src="https://scontent.fjsr8-2.fna.fbcdn.net/v/t39.30808-6/488616626_1400770798013179_4978440291248167803_n.jpg?stp=c253.0.1542.1542a_dst-jpg_s206x206_tt6&_nc_cat=108&ccb=1-7&_nc_sid=5df8b4&_nc_eui2=AeExq-Ab7j3RX-1FwgrLaoydG4a2IuavvHMbhrYi5q-8c4msRUp_JxXzKhPmSOtoAQlakJ8AvIzmPVt0xqmJNtyH&_nc_ohc=elpsQQ0p0bgQ7kNvwFWompv&_nc_oc=AdqQqJS1EudMeJw1cvuypOglebOF_Pktd8CHOAxn1CNeY4C8jn3NZJ9yXfigR3nf2eo&_nc_zt=23&_nc_ht=scontent.fjsr8-2.fna&_nc_gid=heyrzp7oqKbyLywkUMZmFw&_nc_ss=7b2a8&oh=00_Af4g8LXTrqF26gZIoQSPvUAApn3rQXPQb_Bl5ezcxLiXaA&oe=6A08AC0D" class="w-full h-full object-cover group-hover:rotate-3 group-hover:scale-110 transition cursor-pointer">
+            </div>
+            <div class="h-60 rounded-3xl overflow-hidden shadow-lg border-4 border-white group">
+                    <img src="https://scontent.fjsr8-2.fna.fbcdn.net/v/t1.15752-9/608358133_1991056281812312_3814552453859294125_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=9f807c&_nc_eui2=AeG9uqx6TPDY8NXo86WqiHpdSN6QCVWNdltI3pAJVY12Wz37eULk_u47WXY6J4ZwLmqNqc1-sQdTTOTKEfxZaOtm&_nc_ohc=QYrnHU-_E0MQ7kNvwFGiY1D&_nc_oc=AdoG9iksp_9_AJmMekYYEH4LaQ1IhR70pbMUhrk44BtRXpFgFiyhiYtd3iOXtCGnz68&_nc_zt=23&_nc_ht=scontent.fjsr8-2.fna&_nc_ss=7b2a8&oh=03_Q7cD5QEivo760GU93-OxR1V6mUmB5hEdQendQJIOldffcT-BYQ&oe=6A2A5A6B" class="w-full h-full object-cover group-hover:rotate-3 group-hover:scale-110 transition cursor-pointer">
+            </div>
+            <div class="h-60 rounded-3xl overflow-hidden shadow-lg border-4 border-white group">
+                    <img src="https://scontent.fjsr8-2.fna.fbcdn.net/v/t39.30808-6/486172475_1389330699157189_3305942681366797426_n.jpg?stp=c253.0.1542.1542a_dst-jpg_s206x206_tt6&_nc_cat=104&ccb=1-7&_nc_sid=5df8b4&_nc_eui2=AeFZGRR7dcjUdh1hN6MRMh5FZaRyHU3WAH9lpHIdTdYAf9OdfnD3ITeRx0rS5uu-bJLV4eDbYodkLst15WQCBcDM&_nc_ohc=FW05Vn_xPvwQ7kNvwG5Xk42&_nc_oc=AdpRbAYcJPT1XJupsLO5zh1s5xEEbF9wtwJc-SlacPA-MQHH-HXUr-lHPcTLWzrwHSc&_nc_zt=23&_nc_ht=scontent.fjsr8-2.fna&_nc_gid=Z9G2bCBMg5wIkT6AUoouSA&_nc_ss=7b2a8&oh=00_Af4TiydTNI6GUNXNN3w903SmTyH-TpE3jAS32JSwBmh_yw&oe=6A08ACB2" class="w-full h-full object-cover group-hover:rotate-3 group-hover:scale-110 transition cursor-pointer">
+            </div>
+            <div class="h-60 rounded-3xl overflow-hidden shadow-lg border-4 border-white group">
+                    <img src="https://scontent.fjsr8-2.fna.fbcdn.net/v/t39.30808-1/473132691_1338031630953763_6787980668525059682_n.jpg?stp=c342.342.1364.1364a_dst-jpg_s200x200_tt6&_nc_cat=106&ccb=1-7&_nc_sid=1d2534&_nc_eui2=AeGtuhK9jTWKMcyKQlL8un4ObEP5doHRyulsQ_l2gdHK6cNYuP5_Nt71yNsPJobzEjzGhDe9n0oj__2yDu4xWiWf&_nc_ohc=KqWUjp7tP0YQ7kNvwErFacm&_nc_oc=AdqD_V-3yIMuQ98icpYRYeTh41frm8t4vSKnbaUzx3g88MP9M0qAvr4AX03eD-vmP48&_nc_zt=24&_nc_ht=scontent.fjsr8-2.fna&_nc_gid=kWAIZILQyrbnxwmJIOGy2Q&_nc_ss=7b2a8&oh=00_Af5aO-uaTSgEUqUqZ7bwF1VQEtnaeAsom6gpD7WNuObCSA&oe=6A08A337" class="w-full h-full object-cover group-hover:rotate-3 group-hover:scale-110 transition cursor-pointer">
+            </div>
+        </div>
+    </section>
+
+    <section id="instructors" class="py-24 px-4 bg-white">
+        <div class="max-w-7xl mx-auto text-center">
+            <h2 class="text-3xl font-bold section-header">শিক্ষার্থীদের মন্তব্য</h2>
+            <div class="grid md:grid-cols-4 gap-8 mt-16">
+                <div class="group">
+                    <div class="w-40 h-40 mx-auto rounded-full overflow-hidden border-4 border-blue-100 group-hover:border-blue-600 transition p-1">
+                        <img src="https://bdyouthict.com/uploads/MD%20JIHAD%20HOSSAN-01748193957.png" class="w-full h-full object-cover rounded-full">
+                    </div>
+                    <h5 class="mt-4 font-bold text-lg">মোঃ জিহাদ</h5>
+                    <p class="text-sm text-gray-500">আমি প্রশিক্ষণের মাধ্যমে আমার আত্মবিশ্বাস বাড়াতে সক্ষম হয়েছি। ক্যারিয়ার গঠনে এই প্রশিক্ষণ অতান্ত সহায়ক ছিল</p>
+                </div>
+                <div class="group">
+                    <div class="w-40 h-40 mx-auto rounded-full overflow-hidden border-4 border-blue-100 group-hover:border-blue-600 transition p-1">
+                        <img src="https://scontent.fjsr8-2.fna.fbcdn.net/v/t39.30808-6/637965039_122153245250701027_7025336308001108559_n.jpg?_nc_cat=111&ccb=1-7&_nc_sid=1d70fc&_nc_eui2=AeERAyf7RJizrnZN_4C4nIFip7oHX3dGsfGnugdfd0ax8eBotzKWIKZzwtsDbIsP0KKc6zlWCvJnc6v6DY3dnMar&_nc_ohc=uiCSN012CDkQ7kNvwHWBkzK&_nc_oc=AdrsXSDfIHYe44bKlJjoh4jXXaWQUtmrOjpi0pGmRGkzFpynRuBemGybkUyDlWXywc8&_nc_zt=23&_nc_ht=scontent.fjsr8-2.fna&_nc_gid=rWHZ35CyKdpRTrEl0ys-mQ&_nc_ss=7b2a8&oh=00_Af79e0wCH0I6BGpfxEKMYk8qbe5yjpr34pEL--TUKloa8w&oe=6A08B8B8" class="w-full h-full object-cover rounded-full">
+                    </div>
+                    <h5 class="mt-4 font-bold text-lg">মোঃ মাফুজ</h5>
+                    <p class="text-sm text-gray-500">প্রশিক্ষণের সামগ্রিক মান অত্যন্ত ভালো।
+প্রযুক্তি এবং উপকরণ বাবহার করে শেখাদ্যে হয়েছে, যা আমাদের কাজে লাগে</p>
+                </div>
+                <div class="group">
+                    <div class="w-40 h-40 mx-auto rounded-full overflow-hidden border-4 border-blue-100 group-hover:border-blue-600 transition p-1">
+                    </div>
+                    <h5 class="mt-4 font-bold text-lg">মোঃ মুনজুর</h5>
+                    <p class="text-sm text-gray-500">।'এই প্রশিক্ষণের মাধ্যমে আমি বাস্তবিক দক্ষতা অর্জন করেছি যা আমার কর্মজীবনে গুরুত্বপূর্ণ ভূমিকা রেখেছে। প্রশিক্ষকরা অত্যন্ত অভিজ্ঞ এবং সাহাযাপ্রবণা।"</p>
+                </div>
+                <div class="group">
+                    <div class="w-40 h-40 mx-auto rounded-full overflow-hidden border-4 border-blue-100 group-hover:border-blue-600 transition p-1">
+                        <img src="https://scontent.fjsr8-2.fna.fbcdn.net/v/t39.30808-6/525613864_758284426851091_3665280540419914167_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=1d70fc&_nc_eui2=AeHI5X-qfoPSVAeWs-05f0sn6MqeZKVu7n3oyp5kpW7ufQfzTNMxzjTIEemAQ-S4sooYnif91LP0YL6oVMvDRy-b&_nc_ohc=7eWxzO1dhQsQ7kNvwGQg1qH&_nc_oc=AdpAblrVb7ljOk5NJuvmOTK6w762e-GHn8_IlFOBMEkjf5jcSfXe67aINqg49tewHfs&_nc_zt=23&_nc_ht=scontent.fjsr8-2.fna&_nc_gid=Sa4UMaQK2dMaMOHrlIqmyQ&_nc_ss=7b2a8&oh=00_Af4-_z1d1c6SyX4ZUKPR2rJyg8QMkOR5OvwJwsRTh2_ubQ&oe=6A08DB75" class="w-full h-full object-cover rounded-full">
+                    </div>
+                    <h5 class="mt-4 font-bold text-lg">মোঃ রাহাত</h5>
+                    <p class="text-sm text-gray-500">এই প্রশিক্ষণের মাধ্যমে আমি বাস্তবিক দক্ষতা অর্জন করেছি যা আমার কর্মজীবনে গুরুত্বপূর্ণ ভূমিকা রেখেছে। প্রশিক্ষকরা অত্যন্ত অভিজ্ঞ এবং সাহায্যপ্ররণা।"</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer id="contact" class="bg-[#0b1120] text-white pt-20 pb-8 px-4">
+        <div class="max-w-7xl mx-auto grid md:grid-cols-4 gap-12 border-b border-gray-800 pb-16">
+            <div class="col-span-1 md:col-span-1">
+                <div class="flex items-center gap-2 mb-6">
+<div class="logo">
+    <a href="index.html">
+        <img src="https://ik.imagekit.io/hw7dt79rm/Screenshot%20(88)-modified.png" alt="Company Logo" width="150" height="50">
+    </a>
+</div>
+<h2 class="text-xl font-bold">Unique Computer Training Center (329)</h2>
+                </div>
+                <p class="text-gray-400 text-sm leading-relaxed mb-6">ইউনিক কম্পিউটার ট্রেনিং সেন্টার দীর্ঘ ৫ বছর ধরে বিশ্বস্ততার সাথে দক্ষ জনশক্তি তৈরিতে কাজ করে যাচ্ছে। আমাদের লক্ষ্য বেকারত্ব দূর করা।</p>
+                <div class="flex gap-4">
+                    <a href="https://www.facebook.com/share/1JB9qxqyQ4/" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-blue-600 transition"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-red-600 transition"><i class="fab fa-youtube"></i></a>
+                    <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-blue-400 transition"><i class="fab fa-twitter"></i></a>
+                </div>
+            </div>
+            <div>
+                <h4 class="text-lg font-bold mb-6">গুরুত্বপূর্ণ লিংক</h4>
+                <ul class="space-y-4 text-gray-400 text-sm">
+                    <li><a href="#" class="hover:text-blue-400">ভর্তি সংক্রান্ত তথ্য</a></li>
+                    <li><a href="https://bdyouthict.com/exam-result" class="hover:text-blue-400">অনলাইন সার্টিফিকেট যাচাই</a></li>
+                    <li><a href="#" class="hover:text-blue-400">সফল শিক্ষার্থীদের তালিকা</a></li>
+                    <li><a href="#" class="hover:text-blue-400">অফিসিয়াল নোটিশ বোর্ড</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-lg font-bold mb-6">কোর্সসমূহ</h4>
+                <ul class="space-y-4 text-gray-400 text-sm">
+                    <li><a href="#" class="hover:text-blue-400">কম্পিউটার অফিস অ্যাপ্লিকেশন</a></li>
+                    <li><a href="#" class="hover:text-blue-400">প্রফেশনাল গ্রাফিক্স ডিজাইন</a></li>
+                    <li><a href="#" class="hover:text-blue-400">ওয়েব ডিজাইন ও ফ্রিল্যান্সিং</a></li>
+                    <li><a href="#" class="hover:text-blue-400"></a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-lg font-bold mb-6">সরাসরি যোগাযোগ</h4>
+                <p class="text-gray-400 text-sm mb-4"><i class="fas fa-map-marker-alt text-blue-500 mr-2"></i> রুস্তম আলী মার্কেট, পুলিশ ক্যাম্প মোড় সংলগ্ন, হিজলগাড়ী বাজার, চুয়াডাঙ্গা।</p>
+                <p class="text-gray-400 text-sm mb-4"><i class="fas fa-phone-alt text-blue-500 mr-2"></i> 01990649885</p>
+                <p class="text-gray-400 text-sm mb-4"><i class="fas fa-phone-alt text-blue-500 mr-2"></i> 01871949404</p>
+                <p class="text-gray-400 text-sm"><i class="fas fa-envelope text-blue-500 mr-2"></i> hakimulbz@gmail.com</p>
+            </div>
+        </div>
+        <div class="text-center mt-10 text-gray-500 text-sm">
+    <p>&copy; ২০২৬ ইউনিক কম্পিউটার ট্রেনিং সেন্টার। সর্বস্বত্ব সংরক্ষিত।</p>
+
+    <p class="mt-2 text-xs opacity-50 italic uppercase tracking-widest flex items-center justify-center gap-2">
+        Developed by 
+        
+        Md Jihad Hossan
+        <a href="https://www.facebook.com/share/1LSr57mQ6y/" target="_blank" class="hover:text-blue-600 transition-colors duration-300">
+            <i class="fab fa-facebook text-base"></i>
+        </a>
+    </p>
+</div>
+
+
+    <!-- Firebase Scripts -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyD76huKaUofj5I6fwHw_jMvoFG76puL01Q",
+            authDomain: "all-site-31c1b.firebaseapp.com",
+            projectId: "all-site-31c1b",
+            storageBucket: "all-site-31c1b.firebasestorage.app",
+            messagingSenderId: "260631164593",
+            appId: "1:260631164593:web:be88af3ab3c1b181e4de80"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        window.openAuth = () => document.getElementById('authModal').style.display = 'flex';
+        window.closeAuth = () => document.getElementById('authModal').style.display = 'none';
+        
+        window.toggleMode = (mode) => {
+            const loginBox = document.getElementById('login-box');
+            const signupBox = document.getElementById('signup-box');
+            const title = document.getElementById('form-title');
+            if(mode === 'signup') {
+                loginBox.classList.add('hidden');
+                signupBox.classList.remove('hidden');
+                title.innerText = "নতুন অ্যাকাউন্ট";
+            } else {
+                signupBox.classList.add('hidden');
+                loginBox.classList.remove('hidden');
+                title.innerText = "লগইন করুন";
+            }
+        };
+
+        document.getElementById('signup-btn').onclick = async () => {
+            const name = document.getElementById('s-name').value;
+            const email = document.getElementById('s-email').value;
+            const pass = document.getElementById('s-pass').value;
+            if(!name || !email || !pass) { alert("তথ্য পূরণ করুন!"); return; }
+            try {
+                const userCredential = await createUserWithEmailAndPassword(auth, email, pass);
+                await setDoc(doc(db, "users", userCredential.user.uid), { fullName: name, email: email, createdAt: new Date() });
+                alert("সফল হয়েছে!"); toggleMode('login');
+            } catch (error) { alert(error.message); }
+        };
+
+        document.getElementById('login-btn').onclick = async () => {
+            const email = document.getElementById('l-email').value;
+            const pass = document.getElementById('l-pass').value;
+            try {
+                await signInWithEmailAndPassword(auth, email, pass);
+                alert("লগইন সফল!"); closeAuth();
+            } catch (error) { alert("ভুল ইমেইল বা পাসওয়ার্ড!"); }
+        };
+    </script>
+</body>
+</html>
